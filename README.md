@@ -1,6 +1,6 @@
 # AUTH
   
-This is a Node.js app I built to implement **Basic Authentication** using Express.js. It covers the basics of registering users, logging in, and protecting routes with HTTP Basic Auth. If you're exploring authentication like me, this might be helpful!
+This is a Node.js app I built to implement **Basic Authentication** using Express.js. It covers the basics of registering users, logging in, and protecting routes with HTTP Basic Auth.
 
 ### Features
 
