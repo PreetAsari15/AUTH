@@ -87,14 +87,9 @@ const authenticate = (req, res, next) => {
 };
 
 //Protected route
-app.get(
-  "/protected",
-  authenticate,
-  (req,
-  (res) => {
-    res.json({ message: `Welcome, ${req.user.username}` });
-  })
-);
+app.get("/protected", authenticate, (req, res) => {
+  res.json({ message: `Welcome, ${req.user.username}` });
+});
 
 //log when server is running
 app.listen(PORT, () => {
