@@ -36,7 +36,7 @@ app.post("/register", async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
   //Save the user
-  user.push({ username, password: hashedPassword });
+  users.push({ username, password: hashedPassword });
   res.status(201).json({ message: "User registered successfully" });
 });
 
@@ -63,4 +63,40 @@ app.post("/login", async (req, res) => {
   }
 
   res.json({ message: "Login successful!" });
+});
+
+//Basic Authentication middleware
+const authenticate = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ message: "Missing Authorization header" });
+  }
+
+  const [username, password] = Buffer.from(authHeader.split(" ")[1], "base64")
+    .toString()
+    .split(":");
+
+  //Find user
+  const user = users.find((user) => user.username === username);
+  if (!user || !bcrypt.compareSync(password, user.password)) {
+    return res.status(401).json({ message: "Invalid credentials." });
+  }
+
+  req.user = user; //Attach user to the request
+  next();
+};
+
+//Protected route
+app.get(
+  "/protected",
+  authenticate,
+  (req,
+  (res) => {
+    res.json({ message: `Welcome, ${req.user.username}` });
+  })
+);
+
+//log when server is running
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });
